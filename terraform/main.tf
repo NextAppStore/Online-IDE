@@ -26,7 +26,7 @@ locals {
   app_name           = "online-ide"
   flavor             = "gp1.small"
   key_pair           = "" # Empty = password auth only
-  enable_floating_ip = true
+  enable_floating_ip = false
 }
 
 # Load Packer image from Glance
