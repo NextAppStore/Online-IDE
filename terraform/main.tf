@@ -27,6 +27,12 @@ locals {
   flavor             = "gp1.small"
   key_pair           = "" # Empty = password auth only
   enable_floating_ip = false
+
+  # Who may reach the code-server web UI. Campus and VPN only, deliberately:
+  # each instance authenticates with a generated password over plain HTTP, so a
+  # publicly reachable port would put those passwords on the wire in clear.
+  # Widen this only together with TLS termination.
+  web_source_cidr = "141.72.0.0/16"
 }
 
 # Load Packer image from Glance
@@ -78,9 +84,17 @@ resource "random_password" "user_passwords" {
 
 # One port object per team
 resource "openstack_networking_port_v2" "team_port" {
-  for_each           = toset(local.teams_list)
-  network_id         = var.network_uuid
-  security_group_ids = [var.shared_secgroup_id]
+  for_each   = toset(local.teams_list)
+  network_id = var.network_uuid
+
+  # Two groups, because they answer different questions. The shared one is the
+  # platform's and governs SSH and 80/443; it knows nothing about this app. The
+  # second is ours and opens the ports code-server actually listens on - see
+  # security_group.tf.
+  security_group_ids = [
+    var.shared_secgroup_id,
+    openstack_networking_secgroup_v2.code_server.id,
+  ]
 }
 
 # Deploy one VM per team, explicitly bound to its port
