@@ -184,7 +184,8 @@ locals {
   user_accounts = {
     for uid, user in local.users_map : uid => {
       type     = "password"
-      ip       = local.enable_floating_ip ? openstack_networking_floatingip_v2.team_fip[user.team].address : openstack_networking_port_v2.team_port[user.team].all_fixed_ips[0]
+      ip       = local.enable_floating_ip ? openstack_networking_floatingip_v2.team_fip[user.team].address : openstack_compute_instance_v2.team_ide[user.team].network[0].fixed_ip_v4
+      ip_v6    = openstack_compute_instance_v2.team_ide[user.team].network[0].fixed_ip_v6
       port     = 8080 + local.user_indices[uid]
       username = user.username
       auth     = random_password.user_passwords[uid].result

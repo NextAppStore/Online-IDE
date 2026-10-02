@@ -30,6 +30,7 @@ output "team_vms" {
       instance_id   = openstack_compute_instance_v2.team_ide[team].id
       instance_name = openstack_compute_instance_v2.team_ide[team].name
       fixed_ip      = openstack_compute_instance_v2.team_ide[team].network[0].fixed_ip_v4
+      fixed_ip_v6   = openstack_compute_instance_v2.team_ide[team].network[0].fixed_ip_v6
       floating_ip   = local.enable_floating_ip ? openstack_networking_floatingip_v2.team_fip[team].address : null
       url           = local.enable_floating_ip ? "http://${openstack_networking_floatingip_v2.team_fip[team].address}:8080" : "http://${openstack_compute_instance_v2.team_ide[team].network[0].fixed_ip_v4}:8080"
     }
