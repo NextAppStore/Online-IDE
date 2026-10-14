@@ -48,8 +48,19 @@ resource "openstack_networking_secgroup_rule_v2" "code_server" {
   description       = "code-server web UI (campus/VPN only)"
 }
 
-# No IPv6 counterpart: the App is deployed onto DHBWv4 (``network_uuid``), so
-# the instances have no IPv6 address to reach. Should the platform ever hand
-# out a dual-stack network, this file needs a second rule - OpenStack
-# security-group rules are per-ethertype and the IPv4 rule above would not
-# filter, or admit, a single IPv6 packet.
+# IPv6 counterpart: network_uuid now defaults to DHBWV6 (dual-stack), so the
+# instances get a v6 address too — without this second rule, the DHBW VPN's
+# IPv6-only route to OpenStack instances (see Ubuntu-App/packer's
+# ssh_ip_version comment) would have no way to reach code-server at all.
+# Security-group rules are per-ethertype, so IPv4 and IPv6 each need their
+# own rule even on the same dual-stack network.
+resource "openstack_networking_secgroup_rule_v2" "code_server_v6" {
+  security_group_id = openstack_networking_secgroup_v2.code_server.id
+  direction         = "ingress"
+  ethertype         = "IPv6"
+  protocol          = "tcp"
+  port_range_min    = 8080
+  port_range_max    = 8099
+  remote_ip_prefix  = "::/0"
+  description       = "code-server web UI (IPv6)"
+}
