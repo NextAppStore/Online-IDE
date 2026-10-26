@@ -13,5 +13,5 @@ packer_cache/
 # OS files
 .DS_Store
 
-# Aufgaben (lokale Java-Aufgaben, nicht committen)
+# Assignments (local Java assignments, do not commit)
 aufgaben/

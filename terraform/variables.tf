@@ -1,6 +1,6 @@
 ########################################
-# CUSTOM-Variablen (Optional)
-# Werden vom User gesetzt
+# CUSTOM variables (optional)
+# Set by the user
 ########################################
 
 variable "users" {
@@ -11,12 +11,12 @@ variable "users" {
   default = {}
 }
 
-# Per-Team-Beispiel: jeder Lehrgruppe (Team) wird im Wizard eine
-# eigene Flavor-Größe zugewiesen. Der Wizard rendert einen Picker
-# pro Team-Name; Terraform sieht eine ``map(string)`` mit
-# ``team_name → flavor_id``-Einträgen. Beispiel für die neue
-# ``var_scope``-Marker-Erweiterung — beweist, dass nicht nur
-# File-Variablen scoped sein können.
+# Per-team example: each study group (team) is assigned its own
+# flavor size in the wizard. The wizard renders one picker per
+# team name; Terraform sees a ``map(string)`` with
+# ``team_name → flavor_id`` entries. Example for the new
+# ``var_scope`` marker extension — proves that not only
+# file variables can be scoped.
 variable "team_flavor_ids" {
   description = "[CONTRACT] Flavor-ID pro Team — Picker-Auswahl @openstack:flavor:id:single:team"
   type        = map(string)
@@ -35,8 +35,8 @@ variable "assignment_files" {
 }
 
 ########################################
-# CONTRACT-Variablen (PFLICHT)
-# Werden vom Worker/Platform gesetzt
+# CONTRACT variables (REQUIRED)
+# Set by the worker/platform
 ########################################
 
 variable "image_name" {
@@ -48,8 +48,8 @@ variable "image_name" {
 variable "network_uuid" {
   description = "UUID des internen Netzwerks @openstack:network:id"
   type        = string
-  # DHBWV6: dual-stack (v4+v6 auf demselben Subnetz-Paar) — jede VM
-  # bekommt automatisch beide Fixed-IPs von Neutron.
+  # DHBWV6: dual-stack (v4+v6 on the same subnet pair) — every VM
+  # automatically gets both fixed IPs from Neutron.
   default = "9b579624-d844-4df3-b38d-89978b31d37d"
 }
 
