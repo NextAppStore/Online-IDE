@@ -43,9 +43,9 @@ echo "[4/5] Configuring code-server defaults..."
 # Global config for code-server (overridden by per-user configs)
 sudo mkdir -p /etc/code-server
 
-# Default config: listen on all interfaces, port 8080
+# Default config: listen on all interfaces (IPv6 + IPv4), port 8080
 sudo tee /etc/code-server/config.yaml >/dev/null << 'EOF'
-bind-addr: 0.0.0.0:8080
+bind-addr: "[::]:8080"
 auth: password
 cert: false
 EOF
