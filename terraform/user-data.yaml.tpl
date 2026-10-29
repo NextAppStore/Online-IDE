@@ -59,7 +59,7 @@ runcmd:
   - chown -R ${user.username}:${user.username} /home/${user.username}/.config
   - |
     cat > /home/${user.username}/.config/code-server/config.yaml << 'EOFCONFIG${user_id}'
-    bind-addr: 0.0.0.0:${lookup(user_ports, user_id, 8080)}
+    bind-addr: "[::]:${lookup(user_ports, user_id, 8080)}"
     auth: password
     password: "${passwords[user_id]}"
     cert: false
